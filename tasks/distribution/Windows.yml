@@ -1,2 +1,96 @@
 ---
 # tasks file for sbaerlocher.settings
+
+- name: "windows : create associations"
+  win_template:
+    src: "AppAssoc.xml.j2"
+    dest: "{{ settings_root_directory }}\\xml.d\\AppAssoc.xml"
+  register: register_associations
+  when: settings_associations_apps_enabled
+
+# https://getadmx.com/?Category=Windows_10_2016&Policy=Microsoft.Policies.WindowsExplorer::DefaultAssociationsConfiguration
+- name: "windows : set a default associations configuration file"
+  win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows\System
+    name: DefaultAssociationsConfiguration
+    data: "{{ settings_root_directory }}\\xml.d\\AppAssoc.xml"
+    type: string
+    state: "{{ 'present' if settings_associations_apps_enabled else 'absent' }}"
+  when: >
+    register_associations.changed or
+    not settings_associations_apps_enabled
+
+- name: "windows : trust sites in Netzworks by FQDN"
+  win_regedit:
+    path: "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\Domains\\{{  item.0.split('.')[1:] | join('.') }}\\{{ item.0.split('.')[0] }}"
+    name: "file"
+    data: "{{ item.1 }}"
+    type: dword
+  when: item.0.split('.') | length > 1
+  with_nested:
+    - "{{ settings_trust_sites_inventory }}"
+    - "{{ settings_trust_sites_zone }}"
+
+- name: "windows : trust sites in Netzworks by host"
+  win_regedit:
+    path: "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\Domains\\{{ item.0.split('.')[0] | lower }}"
+    name: "file"
+    data: "{{ item.1 }}"
+    type: dword
+  when: item.0.split('.') | length > 1
+  with_nested:
+    - "{{ settings_trust_sites_inventory }}"
+    - "{{ settings_trust_sites_zone }}"
+
+# https://www.howtogeek.com/244606/how-to-enable-num-lock-automatically-when-your-computer-boots/
+- name: "windows : enable numlock in default"
+  win_regedit:
+    path: HKU:\.DEFAULT\Control Panel\Keyboard
+    name: InitialKeyboardIndicators
+    data: 2
+    type: string
+  when: settings_numlock_default_profile_enable
+
+# https://getadmx.com/?Category=Windows_10_2016&Policy=Microsoft.Policies.GameDVR::AllowGameDVR
+- name: "windows : enables or disables windows game recording and broadcasting"
+  win_regedit:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR
+    name: AllowGameDVR
+    data: "{{ '00000001' if settings_game_dvr_enabled else '00000000' }}"
+    type: dword
+
+# https://www.top-password.com/blog/block-or-disable-microsoft-account-in-windows-10-8/
+- name: "windows : block microsoft account"
+  win_regedit:
+    path: "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+    name: "NoConnectedUser"
+    data: "{{ '00000000' if settings_connection_microsft_account_enabled else '00000003' }}"
+    type: dword
+    state: "{{ 'absent' if settings_connection_microsft_account_enabled else 'present' }}"
+
+# https://www.top-password.com/blog/block-or-disable-microsoft-account-in-windows-10-8/
+- name: "windows : block from switching to microsoft account"
+  win_regedit:
+    path: "HKLM:\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Settings\\AllowYourAccount"
+    name: "value"
+    data: "{{ '00000001' if settings_switching_to_microsft_account_enabled else '00000000' }}"
+    type: dword
+
+# https://www.petri.com/how-to-disable-windows-10-fast-startup-and-why-you-might-want-to
+- name: "windows : require use of fast startup"
+  win_regedit:
+    path: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power
+    name: HiberbootEnabled
+    data: "{{ '00000001' if settings_hiberboot_enabled else '00000000' }}"
+    type: dword
+
+# https://www.tenforums.com/tutorials/107865-add-remove-lid-close-action-power-options-windows.html#option2
+# http://www.winfaq.de/faq_html/Content/tip2000/onlinefaq.php?h=tip2379.htm
+- name: 'windows : add or Remove "Lid close action" from power options in windows'
+  win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Power\PowerSettings\5CA83367-6E45-459F-A27B-476B1D01C936
+    name: ACSettingIndex
+    data: "{{ '00000001' if settings_lid_close_action_enabled else '00000000' }}"
+    type: dword
+  when: >
+    not ansible_system_vendor == "QEMU"
