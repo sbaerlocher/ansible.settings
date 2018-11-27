@@ -27,7 +27,7 @@
 
 - name: "windows : trust sites in Netzworks"
   win_regedit:
-    path: "{{ item.1 }}\\{{ item.3 }}"
+    path: "{{ item.1 }}\\{{ item.0.split('.')[1:] | join('.') }}\\{{ item.0.split('.')[0] }}"
     name: "file"
     data: "{{ settings_trust_sites_zone }}"
     type: dword
@@ -35,7 +35,6 @@
   with_nested:
     - "{{ settings_trust_sites_inventory }}"
     - "{{ settings_trust_sites_path }}"
-    - "{{ settings_trust_sites_domain }}"
 
 # https://www.howtogeek.com/244606/how-to-enable-num-lock-automatically-when-your-computer-boots/
 - name: "windows : enable numlock in default"
