@@ -19,7 +19,7 @@ settings_trust_sites_inventory:
   - "{{ groups['NAS'] | default('') }}"
 
 settings_trust_sites_zone:
-  - "3"
+  - "2"
 
 settings_associations_apps:
   - Identifier: ".pdf"
