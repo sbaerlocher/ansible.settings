@@ -8,11 +8,6 @@
   register: register_associations
   when: settings_associations_apps_enabled
 
-- name: "windows : check if Wow6432Node exist"
-  win_reg_stat:
-    path: "HKLM:\\SOFTWARE\\Wow6432Node"
-  register: register_check_win6432node
-
 # https://getadmx.com/?Category=Windows_10_2016&Policy=Microsoft.Policies.WindowsExplorer::DefaultAssociationsConfiguration
 - name: "windows : set a default associations configuration file"
   win_regedit:
@@ -24,6 +19,11 @@
   when: >
     register_associations.changed or
     not settings_associations_apps_enabled
+
+- name: "windows : check if Wow6432Node exist"
+  win_reg_stat:
+    path: "HKLM:\\SOFTWARE\\Wow6432Node"
+  register: register_check_win6432node
 
 - name: "windows : trust sites in Netzworks"
   win_regedit:
