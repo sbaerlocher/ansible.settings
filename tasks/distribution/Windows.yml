@@ -28,7 +28,7 @@
 - name: "windows : trust sites in Netzworks"
   win_regedit:
     path: "{{ item.1 }}\\{{ item.0.split('.')[1:] | join('.') }}\\{{ item.0.split('.')[0] }}"
-    name: "file"
+    name: "*"
     data: "{{ settings_trust_sites_zone }}"
     type: dword
   when: item.0.split('.') | length > 1
