@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DefaultAssociations>
+  {% for app in settings_associations_apps %}
+  <Association Identifier="{{ app.Identifier }}" ProgId="{{ app.ProgId }}" ApplicationName="{{ app.ApplicationName }}" />
+  {% endfor %}
+</DefaultAssociations>
