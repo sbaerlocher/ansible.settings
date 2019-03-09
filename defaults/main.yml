@@ -40,3 +40,9 @@ settings_associations_apps:
  # - Identifier: "https"
  #   ProgId: "FirefoxURL-308046B0AF4A39CB"
  #   ApplicationName: "Firefox"
+
+settings_smb_server_name_hardeninglevel_enabled: true
+settings_require_security_signature_enabled: true
+settings_smb_disable_proto:
+    - SMB1
+    - SMB2
