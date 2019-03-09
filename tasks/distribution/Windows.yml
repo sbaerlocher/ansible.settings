@@ -97,7 +97,7 @@
 - name: 'windows : Disable or Enable SMB2'
   win_regedit:
     key: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
-    value: SMB1
+    value: SMB2
     datatype: dword
     data: "{{ '00000001' if settings_smb2_enable else '00000000' }}"
 
