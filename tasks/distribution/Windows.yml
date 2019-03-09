@@ -16,9 +16,6 @@
     data: "{{ settings_root_directory }}\\xml.d\\AppAssoc.xml"
     type: string
     state: "{{ 'present' if settings_associations_apps_enabled else 'absent' }}"
-  when: >
-    register_associations.changed or
-    not settings_associations_apps_enabled
 
 - name: "windows : check if Wow6432Node exist"
   win_reg_stat:
@@ -88,3 +85,35 @@
     type: dword
   when: >
     not ansible_system_vendor == "QEMU"
+
+# https://support.microsoft.com/en-us/help/2696547/how-to-enable-and-disable-smbv1,-smbv2,-and-smbv3-in-windows-vista,-windows-server-2008,-windows-7,-windows-server-2008-r2,-windows-8,-and-windows-server-2012
+- name: 'windows : Disable Older SMB'
+  win_regedit:
+    key: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
+    value: "{{ item }}"
+    datatype: dword
+    data: '00000000'
+  with_items:
+    - "{{ settings_smb_disable_proto }}"
+
+- name: 'windows : Enable SmbServerNameHardeningLevel - SPN validation'
+  win_regedit:
+    key: HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters
+    value: SmbServerNameHardeningLevel
+    datatype: dword
+    data: "{{ '00000001' if settings_smb_server_name_hardeninglevel_enabled else '00000000' }}"
+
+- name: 'windows : Enable requiresecuritysignature - SMB signature'
+  win_regedit:
+    key: HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters
+    value: requiresecuritysignature
+    datatype: dword
+    data: "{{ '00000001' if settings_require_security_signature_enabled else '00000000' }}"
+
+# FIXME! ansible 2.3+: https://github.com/ansible/ansible/issues/18885
+- name: 'windows : Prevent Anonymous Shares Access'
+  win_regedit:
+    key: HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters
+    value: NullSessionShares
+    datatype: multistring
+    data: ""
