@@ -34,6 +34,10 @@ None
 
 ## Changelog
 
+### 1.1.0
+
+* disable smb old version
+
 ### 1.0.0
 
 * inital commit
