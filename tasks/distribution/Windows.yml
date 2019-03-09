@@ -104,7 +104,7 @@
 - name: 'windows : Disable or Enable SMB3'
   win_regedit:
     key: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
-    value: SMB1
+    value: SMB3
     datatype: dword
     data: "{{ '00000001' if settings_smb3_enable else '00000000' }}"
 
