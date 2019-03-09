@@ -44,5 +44,5 @@ settings_associations_apps:
 settings_smb_server_name_hardeninglevel_enabled: true
 settings_require_security_signature_enabled: true
 settings_smb_disable_proto:
-    - SMB1
-    - SMB2
+  - SMB1
+  - SMB2

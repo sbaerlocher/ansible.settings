@@ -16,9 +16,6 @@
     data: "{{ settings_root_directory }}\\xml.d\\AppAssoc.xml"
     type: string
     state: "{{ 'present' if settings_associations_apps_enabled else 'absent' }}"
-  when: >
-    register_associations.changed or
-    not settings_associations_apps_enabled
 
 - name: "windows : check if Wow6432Node exist"
   win_reg_stat:
