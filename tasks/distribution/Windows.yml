@@ -87,14 +87,26 @@
     not ansible_system_vendor == "QEMU"
 
 # https://support.microsoft.com/en-us/help/2696547/how-to-enable-and-disable-smbv1,-smbv2,-and-smbv3-in-windows-vista,-windows-server-2008,-windows-7,-windows-server-2008-r2,-windows-8,-and-windows-server-2012
-- name: 'windows : Disable Older SMB'
+- name: 'windows : Disable or Enable SMB1'
   win_regedit:
     key: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
-    value: "{{ item }}"
+    value: SMB1
     datatype: dword
-    data: '00000000'
-  with_items:
-    - "{{ settings_smb_disable_proto }}"
+    data: "{{ '00000001' if settings_smb1_enable else '00000000' }}"
+
+- name: 'windows : Disable or Enable SMB2'
+  win_regedit:
+    key: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
+    value: SMB1
+    datatype: dword
+    data: "{{ '00000001' if settings_smb2_enable else '00000000' }}"
+
+- name: 'windows : Disable or Enable SMB3'
+  win_regedit:
+    key: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
+    value: SMB1
+    datatype: dword
+    data: "{{ '00000001' if settings_smb3_enable else '00000000' }}"
 
 - name: 'windows : Enable SmbServerNameHardeningLevel - SPN validation'
   win_regedit:
