@@ -13,6 +13,7 @@ settings_connection_microsft_account_enabled: false
 settings_switching_to_microsft_account_enabled: false
 settings_hiberboot_enabled: true
 settings_lid_close_action_enabled: true
+settings_win32_long_paths_enabled: true
 
 settings_trust_sites_inventory:
   - "{{ groups['Server'] | default('') }}"
@@ -25,21 +26,21 @@ settings_trust_sites_path:
   - "HKLM:\\SOFTWARE{{ '\\Wow6432Node' if register_check_win6432node.exists }}\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\Domains"
 
 settings_associations_apps:
-  - Identifier: ".pdf"
-    ProgId: "AcroExch.Document.DC"
-    ApplicationName: "Adobe Acrobat Reader DC"
- # - Identifier: "http"
- #   ProgId: "ChromeHTML"
- #   ApplicationName: "Google Chrome"
- # - Identifier: "https"
- #   ProgId: "ChromeHTML"
- #   ApplicationName: "Google Chrome"
- # - Identifier: "http"
- #   ProgId: "FirefoxURL-308046B0AF4A39CB"
- #   ApplicationName: "Firefox"
- # - Identifier: "https"
- #   ProgId: "FirefoxURL-308046B0AF4A39CB"
- #   ApplicationName: "Firefox"
+  - Identifier: '.pdf'
+    ProgId: 'AcroExch.Document.DC'
+    ApplicationName: 'Adobe Acrobat Reader DC'
+  # - Identifier: "http"
+  #   ProgId: "ChromeHTML"
+  #   ApplicationName: "Google Chrome"
+  # - Identifier: "https"
+  #   ProgId: "ChromeHTML"
+  #   ApplicationName: "Google Chrome"
+  # - Identifier: "http"
+  #   ProgId: "FirefoxURL-308046B0AF4A39CB"
+  #   ApplicationName: "Firefox"
+  # - Identifier: "https"
+  #   ProgId: "FirefoxURL-308046B0AF4A39CB"
+  #   ApplicationName: "Firefox"
 
 settings_smb_server_name_hardeninglevel_enabled: true
 settings_require_security_signature_enabled: true
