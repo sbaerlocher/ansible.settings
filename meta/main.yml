@@ -1,12 +1,11 @@
 ---
-
 galaxy_info:
   role_name: settings
   author: 'Simon Baerlocher <sbaerlocher@sbaerlocher.ch>'
   description: 'this is a role that makes different system settings under windows'
   company: sbaerlo.ch/er
   license: MIT
-  min_ansible_version: 2.5
+  min_ansible_version: 2.9
   platforms:
     - name: windows
       versions:

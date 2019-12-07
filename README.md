@@ -29,22 +29,26 @@ None
 ```yml
 - hosts: all
   roles:
-     - sbaerlocher.settings
+    - sbaerlocher.settings
 ```
 
 ## Changelog
 
+### 1.2.0
+
+- Compatible with 2.9.0
+
 ### 1.1.0
 
-* disable smb old version
+- disable smb old version
 
 ### 1.0.0
 
-* inital commit
+- inital commit
 
 ## Author
 
-* [Simon Bärlocher](https://sbaerlocher.ch)
+- [Simon Bärlocher](https://sbaerlocher.ch)
 
 ## License
 

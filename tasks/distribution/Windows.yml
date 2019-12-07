@@ -6,7 +6,7 @@
     src: 'AppAssoc.xml.j2'
     dest: "{{ settings_root_directory }}\\xml.d\\AppAssoc.xml"
   register: register_associations
-  when: settings_associations_apps_enabled
+  when: settings_associations_apps_enabled | bool
 
 # https://getadmx.com/?Category=Windows_10_2016&Policy=Microsoft.Policies.WindowsExplorer::DefaultAssociationsConfiguration
 - name: 'windows : set a default associations configuration file'
@@ -40,7 +40,7 @@
     name: InitialKeyboardIndicators
     data: 2
     type: string
-  when: settings_numlock_default_profile_enable
+  when: settings_numlock_default_profile_enable | bool
 
 # https://getadmx.com/?Category=Windows_10_2016&Policy=Microsoft.Policies.GameDVR::AllowGameDVR
 - name: 'windows : enables or disables windows game recording and broadcasting'
