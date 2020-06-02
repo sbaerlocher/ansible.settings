@@ -14,6 +14,7 @@ settings_switching_to_microsft_account_enabled: false
 settings_hiberboot_enabled: true
 settings_lid_close_action_enabled: true
 settings_win32_long_paths_enabled: true
+settings_allow_domain_pin_logon_enabled: false
 
 settings_trust_sites_inventory:
   - "{{ groups['Server'] | default('') }}"

@@ -136,3 +136,10 @@
     value: LongPathsEnabled
     datatype: dword
     data: "{{ '00000001' if settings_win32_long_paths_enabled else '00000000' }}"
+
+- name: 'windows : Turn on convenience PIN sign-in'
+  win_regedit:
+    key: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    value: AllowDomainPINLogon
+    datatype: dword
+    data: "{{ '00000001' if settings_allow_domain_pin_logon_enabled else '00000000' }}"

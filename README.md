@@ -34,6 +34,10 @@ None
 
 ## Changelog
 
+### 1.3.0
+
+- Add Turn on convenience PIN sign-in Option.
+
 ### 1.2.0
 
 - Compatible with 2.9.0
