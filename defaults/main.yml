@@ -45,6 +45,7 @@ settings_associations_apps:
 
 settings_smb_server_name_hardeninglevel_enabled: true
 settings_require_security_signature_enabled: true
+settings_allow_offline_files_enabled: false
 settings_smb1_enable: false
 settings_smb2_enable: true
 settings_smb3_enable: true
